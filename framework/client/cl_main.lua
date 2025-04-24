@@ -1,0 +1,1 @@
+TriggerServerEvent('fmw:test')
