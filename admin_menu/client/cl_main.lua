@@ -4,7 +4,7 @@ g_gamertags = false
 g_invincible = false
 g_noclip = false
 _menuPool = NativeUI.CreatePool()
-mainMenu = NativeUI.CreateMenu("Native UI", "~b~NATIVEUI SHOWCASE")
+mainMenu = NativeUI.CreateMenu("Admin")
 _menuPool:Add(mainMenu)
 _menuPool:MouseControlsEnabled (false);
 _menuPool:MouseEdgeEnabled (false);
@@ -29,6 +29,7 @@ function adminmenu(menu)
     menu.OnCheckboxChange = function(sender, item, checked_)
         if item == gamertags then
             g_gamertags = checked_
+            SetEntityInvincible(pped, g_gamertags)
         end
 
         if item == invincible then
@@ -58,23 +59,26 @@ function RotationToDirection(rotation)
     return vector3(-math.sin(z) * num, math.cos(z) * num, math.sin(x))
 end
 
-RegisterCommand("noclip", function()
-    g_noclip = not g_noclip
-end)
-RegisterKeyMapping("noclip", "", "KEYBOARD", "n")
-
-local speed = 1.0
 Citizen.CreateThread(function()
+    local speed = 1.0
+
     while true do
         Citizen.Wait(1)
         local player = PlayerPedId()
-        local camRot = GetGameplayCamRot(2)
-        local camForward = RotationToDirection(camRot)
-        local coords = GetEntityCoords(player)
-        local newX = coords.x
-        local newY = coords.y
-        local newZ = coords.z
+        if g_gamertags then
+            for k, v in pairs(GetActivePlayers()) do
+                local p_ped = GetPlayerPed(v)
+                local p_svid = GetPlayerServerId(v)
+                print(GetPlayerName(p_svid))
+            end
+        end
         if g_noclip then
+            local camRot = GetGameplayCamRot(2)
+            local camForward = RotationToDirection(camRot)
+            local coords = GetEntityCoords(player)
+            local newX = coords.x
+            local newY = coords.y
+            local newZ = coords.z
 
             SetCamCoord(cam, coords.x, coords.y, coords.z)
             SetCamActive(cam, true)
@@ -108,7 +112,6 @@ Citizen.CreateThread(function()
             end
 
             SetEntityCoordsNoOffset(player, newX, newY, newZ, true, true, true)
-            --SetEntityVelocity(player, 0.0, 0.0, 0.0)
         end
     end
 end)
