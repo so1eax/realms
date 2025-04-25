@@ -13,7 +13,11 @@ server_script {
     '@oxmysql/lib/MySQL.lua',
 }
 server_exports {
-    'GetPlayerData'
+    'GetPlayerData',
+    'SetPlayerMoney',
+    'AddPlayerMoney',
+    'RemovePlayerMoney',
+    'GetPlayerDataFromUID'
 }
 
 shared_script {

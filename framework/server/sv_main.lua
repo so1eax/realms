@@ -38,6 +38,10 @@ local function playerDropped()
         z = entity_coords.z,
     }
 
+    while not MySQL do
+        Wait(100)
+    end
+    
     MySQL.Async.execute('UPDATE users SET coords = @coords, health = @health WHERE identifier = @identifier', {['coords'] = json.encode(coords), ['health'] = GetEntityHealth(player_ped), ['identifier'] = identifier})
 
 end

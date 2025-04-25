@@ -1,45 +1,21 @@
-RegisterServerEvent("identity:sv:check_license")
-RegisterServerEvent("identity:sv:register")
-RegisterServerEvent("identity:sv:save_appearance")
+RegisterNetEvent("admin:sv:update_players")
 
-local function check_license()
-    print(source)
-    local player = source
-    local identifier = GetPlayerIdentifierByType(player, 'license')
-
-    MySQL.Async.fetchAll("SELECT * FROM users WHERE identifier = @identifier", { ['identifier'] = identifier }, function(result)
-        if (not result[1]) then
-            TriggerClientEvent("identity:cl:register", player)
-        else
-            SetPlayerRoutingBucket(player, 0)
-            TriggerClientEvent("identity:cl:login", player, result[1])
-        end
-    end)
-end
-
-local function register(data)
-    local player = source
-    local identifier = GetPlayerIdentifierByType(player, 'license')
-    local registered = MySQL.Sync.fetchAll("SELECT * FROM users WHERE identifier = @identifier", { ['identifier'] = identifier })
-
-    SetPlayerRoutingBucket(player, player)
-
-    if (not registered[1]) then
-        MySQL.Async.execute('INSERT INTO users (identifier, prename, name, dob, height) VALUES (@identifier, @prename, @name, @dob, @height)',
-            {['identifier'] = identifier, ['prename'] = data.prename, ['name'] = data.name, ['dob'] = data.dob, ['height'] = data.height}
-        )
-
-        TriggerClientEvent("identity:cl:finish_register", player)
+local function update_players()
+    local players = {}
+    local g_player = source
+    for k, v in pairs(GetPlayers()) do
+        local sql_data = exports['framework']:GetPlayerData(v)
+        local player = {
+            id = v,
+            uid = sql_data.id,
+            username = GetPlayerName(v),
+            prename = sql_data.prename,
+            name = sql_data.prename,
+        }
+        table.insert(players, player)
     end
+    print(json.encode(players))
+    TriggerClientEvent("admin:cl:update_players", g_player, players)
 end
 
-local function save_appearance(appearance)
-    local player = source
-    local identifier = GetPlayerIdentifierByType(player, 'license')
-
-    MySQL.Async.execute('UPDATE users SET appearance = @appearance WHERE identifier = @identifier', {['appearance'] = json.encode(appearance), ['identifier'] = identifier})
-end
-
-AddEventHandler("identity:sv:register", register)
-AddEventHandler("identity:sv:check_license", check_license)
-AddEventHandler("identity:sv:save_appearance", save_appearance)
+AddEventHandler("admin:sv:update_players", update_players)

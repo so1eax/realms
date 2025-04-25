@@ -32,31 +32,31 @@ local function finish_register()
         type = "hide"
     })
 
-    local config = {
-        ped = true,
-        headBlend = true,
-        faceFeatures = true,
-        headOverlays = true,
-        components = true,
-        props = true,
-        tattoos = true
-    }
+    -- local config = {
+    --     ped = true,
+    --     headBlend = true,
+    --     faceFeatures = true,
+    --     headOverlays = true,
+    --     components = true,
+    --     props = true,
+    --     tattoos = true
+    -- }
     
-    exports['fivem-appearance']:startPlayerCustomization(function (appearance)
-        local gender
+    -- exports['fivem-appearance']:startPlayerCustomization(function (appearance)
+    --     local gender
 
-        if (appearance.model == "mp_f_freemode_01") then
-            gender = "female"
-        else if (appearance.model == "mp_m_freemode_01") then
-            gender = "male"
-        end
+    --     if (appearance.model == "mp_f_freemode_01") then
+    --         gender = "female"
+    --     else if (appearance.model == "mp_m_freemode_01") then
+    --         gender = "male"
+    --     end
 
-        if (appearance) then
-            if (appearance.model == "mp_f_freemode_01" or appearance.model == "mp_m_freemode_01") then
-                TriggerServerEvent("identity:sv:save_appearance", appearance, gender)
-            end    
-        end
-    end, config)
+    --     if (appearance) then
+    --         if (appearance.model == "mp_f_freemode_01" or appearance.model == "mp_m_freemode_01") then
+    --             TriggerServerEvent("identity:sv:save_appearance", appearance, gender)
+    --         end    
+    --     end
+    -- end, config)
 end
 
 RegisterCommand("test", function()

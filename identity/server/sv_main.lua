@@ -7,6 +7,10 @@ local function check_license()
     local player = source
     local identifier = GetPlayerIdentifierByType(player, 'license')
 
+    while not MySQL do
+        Wait(100)
+    end
+
     MySQL.Async.fetchAll("SELECT * FROM users WHERE identifier = @identifier", { ['identifier'] = identifier }, function(result)
         if (not result[1]) then
             TriggerClientEvent("identity:cl:register", player)
@@ -20,6 +24,11 @@ end
 local function register(data)
     local player = source
     local identifier = GetPlayerIdentifierByType(player, 'license')
+
+    while not MySQL do
+        Wait(100)
+    end
+
     local registered = MySQL.Sync.fetchAll("SELECT * FROM users WHERE identifier = @identifier", { ['identifier'] = identifier })
 
     SetPlayerRoutingBucket(player, player)
@@ -36,6 +45,10 @@ end
 local function save_appearance(appearance)
     local player = source
     local identifier = GetPlayerIdentifierByType(player, 'license')
+
+    while not MySQL do
+        Wait(100)
+    end
 
     MySQL.Async.execute('UPDATE users SET appearance = @appearance WHERE identifier = @identifier', {['appearance'] = json.encode(appearance), ['identifier'] = identifier})
 end
