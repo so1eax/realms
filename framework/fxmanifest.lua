@@ -3,22 +3,28 @@ use_experimental_fxv2_oal 'yes'
 lua54 'yes'
 game 'gta5'
 
-client_script {
-    'client/cl_main.lua'
-}
-
 server_script {
+    '@oxmysql/lib/MySQL.lua',
     'server/sv_main.lua',
     'server/sv_exports.lua',
-    '@oxmysql/lib/MySQL.lua',
+    'server/sv_commands.lua',
 }
 server_exports {
     'GetPlayerData',
     'SetPlayerMoney',
     'AddPlayerMoney',
     'RemovePlayerMoney',
-    'GetPlayerDataFromUID'
+    'GetPlayerDataFromUID',
+    'GetPlayerIDFromUID',
 }
+
+
+client_scripts {
+    'client/cl_exports.lua',
+    'client/cl_main.lua',
+    'client/cl_commands.lua',
+}
+export 'TriggerServerCallback'
 
 shared_script {
     'config.lua',

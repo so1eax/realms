@@ -23,6 +23,24 @@ exports('GetPlayerDataFromUID', function(uid)
     return data[1]
 end)
 
+exports('GetPlayerIDFromUID', function(uid)
+    local player = tonumber(uid)
+    local id = nil
+
+    while not MySQL do
+        Wait(100)
+    end
+
+    for k,v in pairs(GetPlayers()) do
+        local data = exports.framework:GetPlayerData(v).id
+        if player == data then 
+            id = v
+        end
+    end
+
+    return id
+end)
+
 exports('SetPlayerMoney', function(pid, type, amount)
     local player = pid
     local identifier = GetPlayerIdentifierByType(player, 'license')
