@@ -2,7 +2,20 @@ RegisterNetEvent("identity:cl:login")
 RegisterNetEvent("identity:cl:register")
 RegisterNetEvent("identity:cl:finish_register")
 
-local function onClientResourceStart()
+local function onClientResourceStart(name)
+    if name == GetCurrentResourceName() then
+        exports.spawnmanager:spawnPlayer({
+            x = Config.register.coords.x,
+            y = Config.register.coords.y,
+            z = Config.register.coords.z - 1,
+            heading = Config.register.coords.w,
+            model = 'a_m_m_farmer_01',
+            skipFade = false
+        })
+    end
+end
+
+local function playerSpawned()
     TriggerServerEvent("identity:sv:check_license")
 end
 
@@ -17,7 +30,6 @@ end
 
 local function register()
     local pped = PlayerPedId()
-    SetEntityCoords(pped, Config.register.coords.x, Config.register.coords.y, Config.register.coords.z - 1)
     FreezeEntityPosition(pped, true)
 
     SetNuiFocus(true, true)
@@ -74,3 +86,4 @@ AddEventHandler("identity:cl:login", login)
 AddEventHandler("identity:cl:register", register)
 AddEventHandler("identity:cl:finish_register", finish_register)
 AddEventHandler("onClientResourceStart", onClientResourceStart)
+AddEventHandler("playerSpawned", playerSpawned)

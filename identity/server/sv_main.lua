@@ -3,7 +3,6 @@ RegisterServerEvent("identity:sv:register")
 RegisterServerEvent("identity:sv:save_appearance")
 
 local function check_license()
-    print(source)
     local player = source
     local identifier = GetPlayerIdentifierByType(player, 'license')
 
@@ -12,11 +11,14 @@ local function check_license()
     end
 
     MySQL.Async.fetchAll("SELECT * FROM users WHERE identifier = @identifier", { ['identifier'] = identifier }, function(result)
-        if (not result[1]) then
+        if not result[1] then
+            print("register")
             TriggerClientEvent("identity:cl:register", player)
         else if result[1].wipe then
+            print("register wipe")
             TriggerClientEvent("identity:cl:register", player)
         else
+            print("login")
             SetPlayerRoutingBucket(player, 0)
             TriggerClientEvent("identity:cl:login", player, result[1])
         end
