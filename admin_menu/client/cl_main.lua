@@ -102,7 +102,11 @@ Citizen.CreateThread(function ()
                 if player_data then
                     if not IsMpGamerTagActive(gamerTags[p]) then
                         --RemoveMpGamerTag(gamerTags[p])
-                        gamerTag = CreateFakeMpGamerTag(ped, "UID: [" .. player_data.uid .. "]" .. " ID: [" .. player .. "] " .. player_data.username .. " | " .. player_data.prename .. " " .. player_data.name, false, false, string.sub(player_data.crew, 1, 5), 0)
+                        if player_data.crew then
+                            gamerTag = CreateFakeMpGamerTag(ped, "UID: [" .. player_data.uid .. "]" .. " ID: [" .. player .. "] " .. player_data.username .. " | " .. player_data.prename .. " " .. player_data.name, false, false, string.sub(player_data.crew, 1, 5), 0)
+                        else
+                            gamerTag = CreateFakeMpGamerTag(ped, "UID: [" .. player_data.uid .. "]" .. " ID: [" .. player .. "] " .. player_data.username .. " | " .. player_data.prename .. " " .. player_data.name, false, false, "", 0)
+                        end
                     end
     
     
@@ -135,7 +139,7 @@ Citizen.CreateThread(function ()
                 else
                     if not IsMpGamerTagActive(gamerTags[p]) then
                         --RemoveMpGamerTag(gamerTags[p])
-                        gamerTag = CreateFakeMpGamerTag(ped, "ID: [" .. player .. "] " .. GetPlayerName(player), false, false, "", 0)
+                        gamerTag = CreateFakeMpGamerTag(ped, "UID: [" .. player_data.uid .. "]" .. " ID: [" .. player .. "] " .. player_data.username, false, false, "", 0)
                     end
     
                     SetMpGamerTagVisibility(gamerTags[p], 2, true)
@@ -169,6 +173,7 @@ Citizen.CreateThread(function ()
             end
             gamerTags = {}
         end
+
         if g_noclip then
             local camRot = GetGameplayCamRot(2)
             local camForward = RotationToDirection(camRot)

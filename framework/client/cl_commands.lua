@@ -67,13 +67,10 @@ RegisterCommand("kick", function(source, args)
 end, false)
 
 RegisterCommand("ban", function(source, args)
-    if args[1] and args[2] then
-        TriggerServerEvent('framework:sv:commands:ban', args[1], args[2])
-    else if args[1] and not args[2] then
-        TriggerServerEvent('framework:sv:commands:ban', args[1], "No reason specified")
+    if args[1] and args[2] and args[3] and args[4] then
+        TriggerServerEvent('framework:sv:commands:ban', args[1], args[2], args[3], args[4])
     else
         print("no args found")
-    end
     end
 end, false)
 

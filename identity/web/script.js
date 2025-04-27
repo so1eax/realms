@@ -17,12 +17,7 @@ window.addEventListener("DOMContentLoaded", function () {
     form.addEventListener('submit', function (event) {
         event.preventDefault(); 
         if (form.checkValidity()) {
-            const formData = {
-                prename: document.getElementById('prename').value,
-                name: document.getElementById('name').value,
-                dob: document.getElementById('dateofbirth').value,
-                height: document.getElementById('height').value
-            }
+            console.log("test")
 
             fetch(`https://${GetParentResourceName()}/register`, {
                 method: 'POST',

@@ -4,7 +4,7 @@ local function update_players()
     local players = {}
     local g_player = source
     for k, v in pairs(GetPlayers()) do
-        local sql_data = exports['framework']:GetPlayerData(v)
+        local sql_data = exports.framework:GetPlayerData(v)
         if sql_data then
             players[v] = {
                 uid = sql_data.id,
@@ -15,7 +15,6 @@ local function update_players()
             }
         end
     end
-    print(json.encode(players))
     TriggerClientEvent("admin:cl:update_players", g_player, players)
 end
 

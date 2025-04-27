@@ -8,7 +8,12 @@ exports('GetPlayerData', function(pid)
 
     local data = MySQL.Sync.fetchAll("SELECT * FROM users WHERE identifier = @identifier", { ['identifier'] = identifier })
 
-    return data[1]
+    if data[1] then
+        data[1].source = player
+        return data[1]
+    end
+
+    return
 end)
 
 exports('GetPlayerDataFromUID', function(uid)

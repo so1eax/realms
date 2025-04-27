@@ -37,7 +37,7 @@ local function kick(id, reason)
     DropPlayer(id, "You have been kicked for: " .. reason)
 end
 
-local function ban(id, reason)
+local function ban(id, datetype, duration, reason)
     reason = reason
     local author = GetPlayerName(source)
     local license = GetPlayerIdentifierByType(id, 'license')
@@ -49,15 +49,33 @@ local function ban(id, reason)
     local fivem = GetPlayerIdentifierByType(id, 'fivem')
     local ip = GetPlayerIdentifierByType(id, 'ip')
 
+    local formatted = nil
+
+    if datetype == "h" then
+        local dt = os.date("*t")
+        dt.hour = dt.hour + duration
+        local newtime = os.time(dt)
+        formatted = os.date("%Y-%m-%d %H:%M:%S", newtime)
+    elseif datetype == "d" then
+        local dt = os.date("*t")
+        dt.day = dt.day + duration
+        local newtime = os.time(dt)
+        formatted = os.date("%Y-%m-%d %H:%M:%S", newtime)
+    end
+
+    if not formatted then
+        return
+    end
+
     while not MySQL do
         Wait(100)
     end
 
-    MySQL.Async.execute('INSERT INTO bans (license, license2, steam, discord, xbl, live, fivem, ip, reason, author) VALUES (@license, @license2, @steam, @discord, @xbl, @live, @fivem, @ip, @reason, @author)',
-            {['license'] = license, ['license2'] = license2, ['steam'] = steam, ['discord'] = discord, ['xbl'] = xbl, ['live'] = live, ['fivem'] =  fivem, ['ip'] = ip, ['reason'] = reason, ['author'] = author}
+    MySQL.Async.execute('INSERT INTO bans (license, license2, steam, discord, xbl, live, fivem, ip, reason, author, duration) VALUES (@license, @license2, @steam, @discord, @xbl, @live, @fivem, @ip, @reason, @author, @duration)',
+            {['license'] = license, ['license2'] = license2, ['steam'] = steam, ['discord'] = discord, ['xbl'] = xbl, ['live'] = live, ['fivem'] =  fivem, ['ip'] = ip, ['reason'] = reason, ['author'] = author, ['duration'] = formatted}
         )
 
-    DropPlayer(id, "You have been banned for: " .. reason)
+    --DropPlayer(id, "You have been banned for: " .. reason)
 end
 
 AddEventHandler('framework:sv:commands:bring', bring)

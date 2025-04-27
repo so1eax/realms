@@ -12,6 +12,7 @@ local function onClientResourceStart(name)
             model = 'a_m_m_farmer_01',
             skipFade = false
         })
+        exports.spawnmanager:setAutoSpawn(false)
     end
 end
 
