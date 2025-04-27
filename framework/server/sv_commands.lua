@@ -1,5 +1,7 @@
 RegisterNetEvent('framework:sv:commands:bring')
 RegisterNetEvent('framework:sv:commands:bringback')
+RegisterNetEvent('framework:sv:commands:kick')
+RegisterNetEvent('framework:sv:commands:ban')
 
 local players = {}
 
@@ -31,5 +33,34 @@ local function bringback(id)
     players[id] = nil
 end
 
+local function kick(id, reason)
+    DropPlayer(id, "You have been kicked for: " .. reason)
+end
+
+local function ban(id, reason)
+    reason = reason
+    local author = GetPlayerName(source)
+    local license = GetPlayerIdentifierByType(id, 'license')
+    local license2 = GetPlayerIdentifierByType(id, 'license2')
+    local steam = GetPlayerIdentifierByType(id, 'steam')
+    local discord = GetPlayerIdentifierByType(id, 'discord')
+    local xbl = GetPlayerIdentifierByType(id, 'xbl')
+    local live = GetPlayerIdentifierByType(id, 'live')
+    local fivem = GetPlayerIdentifierByType(id, 'fivem')
+    local ip = GetPlayerIdentifierByType(id, 'ip')
+
+    while not MySQL do
+        Wait(100)
+    end
+
+    MySQL.Async.execute('INSERT INTO bans (license, license2, steam, discord, xbl, live, fivem, ip, reason, author) VALUES (@license, @license2, @steam, @discord, @xbl, @live, @fivem, @ip, @reason, @author)',
+            {['license'] = license, ['license2'] = license2, ['steam'] = steam, ['discord'] = discord, ['xbl'] = xbl, ['live'] = live, ['fivem'] =  fivem, ['ip'] = ip, ['reason'] = reason, ['author'] = author}
+        )
+
+    DropPlayer(id, "You have been banned for: " .. reason)
+end
+
 AddEventHandler('framework:sv:commands:bring', bring)
 AddEventHandler('framework:sv:commands:bringback', bringback)
+AddEventHandler('framework:sv:commands:kick', kick)
+AddEventHandler('framework:sv:commands:ban', ban)

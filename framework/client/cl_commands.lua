@@ -2,7 +2,7 @@
 RegisterCommand("id", function(source)
     local psid = GetPlayerServerId(PlayerId())
     local uid = exports.framework:GetPlayerData(psid).id
-    print("SID: " .. psid .. " | UID: " .. uid)
+    print("ID: " .. psid .. " | UID: " .. uid)
 end)
 
 RegisterCommand("coords", function()
@@ -52,6 +52,28 @@ RegisterCommand("wipe", function(source, args)
         TriggerServerEvent('framework:sv:main:wipe', args[1])
     else
         print("no args found")
+    end
+end, false)
+
+RegisterCommand("kick", function(source, args)
+    if args[1] and args[2] then
+        TriggerServerEvent('framework:sv:commands:kick', args[1], args[2])
+    else if args[1] and not args[2] then
+        TriggerServerEvent('framework:sv:commands:kick', args[1], "No reason specified")
+    else
+        print("no args found")
+    end
+    end
+end, false)
+
+RegisterCommand("ban", function(source, args)
+    if args[1] and args[2] then
+        TriggerServerEvent('framework:sv:commands:ban', args[1], args[2])
+    else if args[1] and not args[2] then
+        TriggerServerEvent('framework:sv:commands:ban', args[1], "No reason specified")
+    else
+        print("no args found")
+    end
     end
 end, false)
 

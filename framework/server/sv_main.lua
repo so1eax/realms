@@ -4,6 +4,10 @@ RegisterNetEvent('framework:sv:main:wipe')
 
 local server_callbacks = {}
 
+local function isBanned(id)
+    
+end
+
 local function playerConnecting(name, setKickReason, deferrals)
     local player = source
     local license = GetPlayerIdentifierByType(player, 'license')
@@ -26,7 +30,7 @@ local function playerConnecting(name, setKickReason, deferrals)
 
     if (license == connected_license) then
         deferrals.done("Votre license est déja connectée au serveur")
-    else
+    else if isBanned(player)
         deferrals.done()
     end
 end

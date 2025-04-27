@@ -2,6 +2,7 @@ RegisterNetEvent("admin:cl:update_players")
 
 local cam = nil
 local players = {}
+local gamerTags = {}
 
 g_gamertags = false
 g_invincible = false
@@ -24,15 +25,24 @@ function adminmenu(menu)
     local pped = PlayerPedId()
 
     local gamertags = NativeUI.CreateCheckboxItem("Gamertags", g_gamertags)
+    local reload_gamertags = NativeUI.CreateItem("Reload Gamertags")
     local invincible = NativeUI.CreateCheckboxItem("Invincible", g_invincible)
     local noclip = NativeUI.CreateCheckboxItem("NoCip", g_noclip)
     menu:AddItem(gamertags)
+    menu:AddItem(reload_gamertags)
     menu:AddItem(invincible)
     menu:AddItem(noclip)
+    menu.OnItemSelect = function(sender, item, index)
+        if item == reload_gamertags then
+            for k,v in pairs(gamerTags) do
+                RemoveMpGamerTag(v)
+            end
+            gamerTags = {}
+        end
+    end
     menu.OnCheckboxChange = function(sender, item, checked_)
         if item == gamertags then
             g_gamertags = checked_
-            
         end
 
         if item == invincible then
@@ -77,7 +87,6 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function () 
-    local gamerTags = {}
     local speed = 1.0
     while true do
         Citizen.Wait(1)
@@ -156,8 +165,7 @@ Citizen.CreateThread(function ()
             end
         else
             for k,v in pairs(gamerTags) do
-                print(v)
-                RemoveMpGamerTag(gamerTags[v])
+                RemoveMpGamerTag(v)
             end
             gamerTags = {}
         end
